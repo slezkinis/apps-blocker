@@ -25,8 +25,15 @@ while True:
         locking_process = psutil.Process(pid)
         locking_process.terminate()
         os.remove('pid.txt')
-        child = subprocess.Popen(["networksetup", "-setairportpower", "airport", "on"], stdout=subprocess.PIPE)
-        output, error = child.communicate()
+        try:
+            child = subprocess.Popen(["networksetup", "-setairportpower", "airport", "on"], stdout=subprocess.PIPE)
+            output, error = child.communicate()
+        except:
+            try:
+                child = subprocess.Popen(['nmcli', 'device', 'connect', 'wlan0'], stdout=subprocess.PIPE)
+                output, error = child.communicate()
+            except:
+                a = 1
         print('Разблокировано')
         break
     else:

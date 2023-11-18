@@ -7,8 +7,15 @@ import os
 all_processes = []
 def check():
     while True:
-        child = subprocess.Popen(["networksetup", "-setairportpower", "airport", "off"], stdout=subprocess.PIPE)
-        output, error = child.communicate()
+        try:
+            child = subprocess.Popen(["networksetup", "-setairportpower", "airport", "off"], stdout=subprocess.PIPE)
+            output, error = child.communicate()
+        except:
+            try:
+                child = subprocess.Popen(['nmcli', 'device', 'disconnect', 'wlan0'], stdout=subprocess.PIPE)
+                output, error = child.communicate()
+            except:
+                a = 1
         processes = psutil.process_iter()
         try:
             for i in processes:
