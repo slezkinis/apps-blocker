@@ -1,6 +1,7 @@
 import psutil
 import threading
 import subprocess
+import os
 
 
 all_processes = []
@@ -11,9 +12,9 @@ def check():
         processes = psutil.process_iter()
         try:
             for i in processes:
-                if i.name() not in all_processes:
+                if i.pid not in all_processes and 'ytho' not in i.name().lower():
                     try:
-                        i.kill()
+                        i.terminate()
                     except:
                         continue
         except psutil.NoSuchProcess:
@@ -21,8 +22,13 @@ def check():
 
 
 def main():
+    current_file = os.path.realpath(__file__)
+    current_directory = os.path.dirname(current_file)
+    # Обязательно указывтаь полный путь!
+    with open(f'{current_directory}/pid.txt', 'w') as file:
+        file.write(str(os.getpid()))
     processes = psutil.process_iter()
     for i in processes:
-        all_processes.append(i.name())
+        all_processes.append(i.pid)
     thread = threading.Thread(target=check)
     thread.start()

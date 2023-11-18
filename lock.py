@@ -4,7 +4,8 @@ import os
 import hashlib
 import sys
 import os
- 
+import threading
+import time
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -22,6 +23,8 @@ if __name__ == '__main__':
         with open('password.hash', 'wb') as file:
             file.write(storage)
         print('Задан новый пароль!')
+    current_file = os.path.realpath(__file__)
+    current_directory = os.path.dirname(current_file)
     print('Защита включена')
-    with daemon.DaemonContext():
+    with daemon.DaemonContext(working_directory=current_directory):
         main()

@@ -1,6 +1,8 @@
 import subprocess
 import hashlib
 import time
+import psutil
+import os
 
 
 with open('password.hash', 'rb') as file:
@@ -18,11 +20,11 @@ while True:
         100000
     )
     if new_key == key:
-        try:
-            subprocess.check_output(['pkill', 'Python'])
-        except:
-            time.sleep(1)
-            subprocess.check_output(['pkill', 'Python'])
+        with open('pid.txt', 'r') as file:
+            pid = int(file.read())
+        locking_process = psutil.Process(pid)
+        locking_process.terminate()
+        os.remove('pid.txt')
         child = subprocess.Popen(["networksetup", "-setairportpower", "airport", "on"], stdout=subprocess.PIPE)
         output, error = child.communicate()
         print('Разблокировано')
