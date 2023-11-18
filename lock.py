@@ -25,6 +25,10 @@ if __name__ == '__main__':
         print('Задан новый пароль!')
     current_file = os.path.realpath(__file__)
     current_directory = os.path.dirname(current_file)
+    if os.path.exists('pid.txt'):
+        print('Уже запущена!')
+        exit()
     print('Защита включена')
     with daemon.DaemonContext(working_directory=current_directory):
         main()
+    time.sleep(1)
