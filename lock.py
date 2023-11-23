@@ -4,7 +4,7 @@ import os
 import hashlib
 import sys
 import os
-import threading
+import getpass
 import time
 
 if __name__ == '__main__':
@@ -16,7 +16,7 @@ if __name__ == '__main__':
             file.write(storage)
         print('Задан новый пароль!')
     elif not os.path.exists('password.hash'):
-        password = input('[!] Не задан пароль! введите новый пароль: ')
+        password = getpass.getpass('[!] Не задан пароль! введите новый пароль: ')
         salt = os.urandom(32)
         key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
         storage = salt + key 

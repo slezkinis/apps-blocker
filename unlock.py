@@ -1,6 +1,6 @@
 import subprocess
 import hashlib
-import time
+import getpass
 import psutil
 import os
 
@@ -12,10 +12,13 @@ salt = storage[:32]
 key = storage[32:]
 
 while True:
-    password = input('Введите пароль: ')
+    if not os.path.exists('pid.txt'):
+        print('Защита не включена!')
+        break
+    password = getpass.getpass('Введите пароль: ')
     new_key = hashlib.pbkdf2_hmac(
         'sha256',
-        password.encode('utf-8'), # Конвертирование пароля в байты
+        password.encode('utf-8'),
         salt, 
         100000
     )
