@@ -31,5 +31,5 @@ if __name__ == '__main__':
     DETACHED_PROCESS = 8
     current_file = os.path.realpath(__file__)
     current_directory = os.path.dirname(current_file)
-    subprocess.Popen(f'python3 ./start_locking.py {current_directory}', creationflags=DETACHED_PROCESS, close_fds=True)
+    subprocess.Popen(f'python ./start_locking.py {current_directory}', creationflags=DETACHED_PROCESS, close_fds=True)
     time.sleep(1)
