@@ -1,5 +1,4 @@
-import daemon
-from start_locking import main
+import subprocess
 import os
 import hashlib
 import sys
@@ -29,6 +28,8 @@ if __name__ == '__main__':
         print('Уже запущена!')
         exit()
     print('Защита включена')
-    with daemon.DaemonContext(working_directory=current_directory):
-        main()
+    DETACHED_PROCESS = 8
+    current_file = os.path.realpath(__file__)
+    current_directory = os.path.dirname(current_file)
+    subprocess.Popen(f'python3 ./start_locking.py {current_directory}', creationflags=DETACHED_PROCESS, close_fds=True)
     time.sleep(1)
