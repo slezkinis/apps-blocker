@@ -12,8 +12,6 @@ def enable_locking():
     btn.configure(text='Отключить защиту', command=disable_locking)
     DETACHED_PROCESS = 8
     subprocess.Popen('python ./start_locking.py', creationflags=DETACHED_PROCESS, close_fds=True)
-    # with open('pid.txt', 'w') as file:
-    #     file.write('12')
 
 
 def disable_locking():
@@ -35,7 +33,7 @@ def disable_locking():
             storage = salt + key 
             with open('password.hash', 'wb') as file:
                 file.write(storage)
-            status = Label(disable_window, text='Защита отключена', font=("Arial", 15))
+            status = Label(disable_window, text='Защита отключена', font=("Arial", 15), fg='#06b800')
             status.grid(column=0, row=3)
             label_locked.configure(text='Защита отключена')
             btn.configure(text='Включить защиту', command=enable_locking)
@@ -46,7 +44,7 @@ def disable_locking():
             os.remove('pid.txt')
 
         else:
-            status = Label(disable_window, text='Неверный пароль', font=("Arial", 15))
+            status = Label(disable_window, text='Неверный пароль', font=("Arial", 15), fg='#f52c00')
             status.grid(column=0, row=3)
 
     
@@ -83,10 +81,10 @@ def change_password():
                 storage = salt + key 
                 with open('password.hash', 'wb') as file:
                     file.write(storage)
-                status = Label(change_password_window, text='Пароль успешно изменён', font=("Arial", 15))
+                status = Label(change_password_window, text='Пароль успешно изменён', font=("Arial", 15), fg='#06b800')
                 status.grid(column=0, row=3)
             else:
-                status = Label(change_password_window, text='Неверный пароль', font=("Arial", 15))
+                status = Label(change_password_window, text='Неверный пароль', font=("Arial", 15), fg='#f52c00')
                 status.grid(column=0, row=3)
         else:
             salt = os.urandom(32)
@@ -94,7 +92,7 @@ def change_password():
             storage = salt + key 
             with open('password.hash', 'wb') as file:
                 file.write(storage)
-            status = Label(change_password_window, text='Пароль успешно создан', font=("Arial", 15))
+            status = Label(change_password_window, text='Пароль успешно создан', font=("Arial", 15), fg='#06b800')
             status.grid(column=0, row=3)
             btn["state"] = NORMAL
             change_pass_btn.configure(text='Изменить пароль')

@@ -7,16 +7,6 @@ import os
 all_processes_names = []
 def check():
     while True:
-        # try:
-        #     # child = subprocess.Popen(["networksetup", "-setairportpower", "airport", "off"], stdout=subprocess.PIPE)
-        #     # output, error = child.communicate()
-        #     os.system('ipconfig/release')
-        # except:
-        #     try:
-        #         child = subprocess.Popen(['nmcli', 'device', 'disconnect', 'wlan0'], stdout=subprocess.PIPE)
-        #         output, error = child.communicate()
-        #     except:
-        #         a = 1
         processes = psutil.process_iter()
         try:
             for i in processes:
@@ -34,7 +24,6 @@ def main():
     # Обязательно указывтаь полный путь!
     with open(f'{sys.argv[1]}/pid.txt', 'w') as file:
         file.write(str(os.getpid()))
-    os.system('ipconfig/release')
     processes = psutil.process_iter()
     for i in processes:
         all_processes_names.append(i.pid)
