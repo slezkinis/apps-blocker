@@ -3,6 +3,7 @@ from PIL import ImageTk, Image
 import subprocess
 import hashlib
 import psutil
+import time
 
 import os
 
@@ -11,7 +12,9 @@ def enable_locking():
     label_locked.configure(text='Защита включена')
     btn.configure(text='Отключить защиту', command=disable_locking)
     DETACHED_PROCESS = 8
-    subprocess.Popen('python ./start_locking.py', creationflags=DETACHED_PROCESS, close_fds=True)
+    current_file = os.path.realpath(__file__)
+    current_directory = os.path.dirname(current_file)
+    subprocess.Popen(f'python ./start_locking.py {current_directory}', creationflags=DETACHED_PROCESS, close_fds=True)
 
 
 def disable_locking():
@@ -28,20 +31,21 @@ def disable_locking():
             100000
         )
         if key == new_key:
-            salt = os.urandom(32)
-            key = hashlib.pbkdf2_hmac('sha256', enter_password_entry.get().encode('utf-8'), salt, 100000)
-            storage = salt + key 
-            with open('password.hash', 'wb') as file:
-                file.write(storage)
+            with open('pid.txt', 'r') as file:
+                pid = int(file.read())
+                file.close()
+            try:
+                locking_process = psutil.Process(pid)
+                locking_process.terminate()
+            except:
+                a = 1
+                print(10)
+            # os.system('del /f .\\pid.txt')
+            os.unlink('pid.txt')
             status = Label(disable_window, text='Защита отключена', font=("Arial", 15), fg='#06b800')
             status.grid(column=0, row=3)
             label_locked.configure(text='Защита отключена')
             btn.configure(text='Включить защиту', command=enable_locking)
-            with open('pid.txt', 'r') as file:
-                pid = int(file.read())
-            locking_process = psutil.Process(pid)
-            locking_process.terminate()
-            os.remove('pid.txt')
 
         else:
             status = Label(disable_window, text='Неверный пароль', font=("Arial", 15), fg='#f52c00')
